@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <title>Skapa testmodell</title>
+  <style>body{font-family:system-ui;background:#050b14;color:#d8f6ff;padding:40px}a,button{color:#1de9ff;font-size:18px}</style>
+</head>
+<body>
+  <h2>Testmodell av tomten</h2>
+  <p id="s">Bygger…</p>
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+    import { buildTestLot } from '/src/testmodel.js';
+    const scene = new THREE.Scene();
+    scene.add(buildTestLot(THREE));
+    const buf = await new GLTFExporter().parseAsync(scene, { binary: true });
+    const url = URL.createObjectURL(new Blob([buf], { type: 'model/gltf-binary' }));
+    document.getElementById('s').innerHTML = `<a href="${url}" download="tomt-testmodell.glb">Ladda ner tomt-testmodell.glb</a> (${(buf.byteLength / 1024).toFixed(0)} kB)`;
+  </script>
+</body>
+</html>

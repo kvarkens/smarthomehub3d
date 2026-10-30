@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>SmartHomeHub 3D</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">SMART<b>HOME</b>HUB<span>3D</span></div>
+    <nav class="tabs">
+      <button class="tab active" data-view="house">Huset</button>
+      <button class="tab" data-view="plans">Planritning</button>
+    </nav>
+    <button id="settings-btn" class="ghost" aria-label="Ladda upp bilder">⬆ Ladda upp</button>
+  </header>
+
+  <main>
+    <!-- 3D-vy -->
+    <section id="view-house" class="view active">
+      <div id="stage"></div>
+      <div id="swoosh"></div>
+      <svg id="wlines"></svg>
+      <div id="widgets"></div>
+      <div id="dir-label">SYD</div>
+
+      <div class="edit-bar" id="edit-bar">
+        <button id="edit-toggle" class="ghost small">✎ Redigera</button>
+        <span class="edit-tools" hidden>
+          <button id="add-card" class="ghost small">+ Kort</button>
+          <button id="save-view" class="ghost small">📍 Spara vy här</button>
+          <button id="del-view" class="ghost small" hidden>Ta bort vy</button>
+        </span>
+      </div>
+      <div class="pick-hint" id="pick-hint" hidden>Klicka på modellen där kortet ska sitta (Esc avbryter)</div>
+
+      <div class="views-bar" id="views-bar"></div>
+      <div class="compass" id="compass">
+        <button data-dir="N">N<small>Norr</small></button>
+        <button data-dir="W">V<small>Väst</small></button>
+        <button data-dir="top" class="top">▲<small>Uppifrån</small></button>
+        <button data-dir="E">Ö<small>Öst</small></button>
+        <button data-dir="S">S<small>Syd</small></button>
+      </div>
+
+      <dialog id="card-dialog">
+        <form method="dialog" id="card-form">
+          <h4>Kort</h4>
+          <label>Rubrik<input name="title" required placeholder="t.ex. BILLADDARE"></label>
+          <label>Värde<input name="value" placeholder="0.00"></label>
+          <label>Enhet<input name="unit" placeholder="kW"></label>
+          <label>Anteckning<input name="note" placeholder="valfritt"></label>
+          <div class="dlg-row">
+            <button type="button" id="card-pin" class="ghost small">📍 Placera på modellen</button>
+            <button type="button" id="card-unpin" class="ghost small">Lossa</button>
+          </div>
+          <div class="dlg-row end">
+            <button type="button" id="card-del" class="ghost small">Ta bort</button>
+            <button type="button" id="card-cancel" class="ghost small">Avbryt</button>
+            <button value="ok" class="btn small">Spara</button>
+          </div>
+        </form>
+      </dialog>
+
+      <aside id="drawer" class="drawer">
+        <h3>3D-modell av tomten</h3>
+        <p class="hint">Filma tomten med drönare och bygg en modell i t.ex. Polycam, Luma, KIRI eller RealityScan. Exportera som <b>.glb</b> och ladda upp här.</p>
+        <div class="slot">
+          <span class="slot-name" id="model-name">Ingen modell (visar testhus)</span>
+          <label class="btn small">Välj .glb<input hidden type="file" accept=".glb,.gltf,model/gltf-binary" id="model-file"></label>
+          <button class="ghost small" id="model-clear" hidden>✕</button>
+        </div>
+        <div id="model-tools" hidden>
+          <p class="hint">Vrid modellen så att huvudfasaden pekar åt rätt håll.</p>
+          <div class="slot">
+            <button class="ghost small" id="rot-l">↺ 90°</button>
+            <input type="range" min="-180" max="180" step="1" value="0" id="rot-range" style="flex:1">
+            <button class="ghost small" id="rot-r">↻ 90°</button>
+          </div>
+        </div>
+        <h3 style="margin-top:26px">Bilder (testhus)</h3>
+        <p class="hint">Används bara när ingen modell är uppladdad.</p>
+        <div id="slots"></div>
+        <button id="reset-house" class="ghost small">Rensa alla bilder</button>
+      </aside>
+    </section>
+
+    <!-- Planritning -->
+    <section id="view-plans" class="view">
+      <div class="floor-bar" id="floor-bar"></div>
+      <div class="table" id="table">
+        <div class="ruler ruler-x"></div><div class="ruler ruler-y"></div>
+        <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+        <div class="viewport" id="plan-viewport">
+          <img id="plan-img" alt="" draggable="false" />
+        </div>
+        <div class="scan"></div>
+        <div class="empty" id="plan-empty">
+          <p>Ingen planritning ännu</p>
+          <label class="btn">Ladda upp planritning<input type="file" accept="image/*" id="plan-file" hidden /></label>
+        </div>
+        <div class="titleblock" id="titleblock"></div>
+        <div class="zoom">
+          <button id="zin">+</button><button id="zout">−</button><button id="zreset">⟲</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
